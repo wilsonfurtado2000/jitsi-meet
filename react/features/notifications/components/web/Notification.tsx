@@ -124,7 +124,8 @@ const useStyles = makeStyles()((theme: Theme) => {
         },
 
         title: {
-            ...withPixelLineHeight(theme.typography.bodyShortBold)
+            ...withPixelLineHeight(theme.typography.bodyShortBold),
+            overflowWrap: 'break-word',
         },
 
         description: {
