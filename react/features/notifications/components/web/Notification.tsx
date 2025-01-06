@@ -351,6 +351,7 @@ const Notification = ({
                         onClick = { onDismiss }
                         size = { 20 }
                         src = { IconCloseLarge }
+                        tabIndex = { 0 }
                         testId = { `${titleKey || descriptionKey}-dismiss` } />
                 )}
             </div>
