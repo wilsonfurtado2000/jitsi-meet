@@ -359,7 +359,7 @@ const Notification = ({
                                     {t(titleWord)}
                                 </span>
                             )}
-                        {index < titleArray.length - 1 && ' '}
+                            {index < titleArray.length - 1 && ' '}
                         </React.Fragment>
                     );
                 })}
@@ -382,7 +382,7 @@ const Notification = ({
                         size = { 20 }
                         src = { getIcon() } />
                 </div>
-                <div 
+                <div
                     className = { classes.textContainer }
                     ref = { textContainerRef }>
                     {renderNotificationTitle()}
