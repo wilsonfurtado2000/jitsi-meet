@@ -343,27 +343,27 @@ const Notification = ({
 
                     return (
                         <React.Fragment key = { index }>
-                        {isTruncated ? (
-                            <Tooltip
-                                content = { titleWord }>
+                            {isTruncated ? (
+                                <Tooltip
+                                    content = { titleWord }>
+                                    <span
+                                        className = { classes.title }
+                                        ref = { spanRef }>
+                                        {t(titleWord)}
+                                    </span>
+                                </Tooltip>
+                            ) : (
                                 <span
                                     className = { classes.title }
                                     ref = { spanRef }>
-                                        {t(titleWord)}
-                                </span>
-                            </Tooltip>
-                        ):(
-                            <span
-                                ref = { spanRef }
-                                className = { classes.title }>
                                     {t(titleWord)}
-                            </span>
-                        )}
+                                </span>
+                            )}
                         {index < titleArray.length - 1 && ' '}
                         </React.Fragment>
                     );
                 })}
-                </span>
+            </span>
         );
     }, [ title, titleKey, titleArguments ]);
 
@@ -382,7 +382,9 @@ const Notification = ({
                         size = { 20 }
                         src = { getIcon() } />
                 </div>
-                <div ref = { textContainerRef } className = { classes.textContainer }>
+                <div 
+                    className = { classes.textContainer }
+                    ref = { textContainerRef }>
                     {renderNotificationTitle()}
                     {renderDescription()}
                     <div className = { classes.actionsContainer }>
