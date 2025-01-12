@@ -1,5 +1,5 @@
 import { Theme } from '@mui/material';
-import React, { isValidElement, useCallback, useContext, useEffect, useRef } from 'react';
+import React, { isValidElement, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { keyframes } from 'tss-react';
@@ -325,43 +325,44 @@ const Notification = ({
 
         return (
             <span>
-            {notificationTitle.split(' ').map((titleWord, index, titleArray) => {
-                const spanRef = React.createRef<HTMLSpanElement>();
-                const [isTruncated, setIsTruncated] = React.useState(false);
+                {notificationTitle.split(' ').map((titleWord, index, titleArray) => {
+                    const spanRef = React.createRef<HTMLSpanElement>();
+                    const [ isTruncated, setIsTruncated ] = useState(false);
 
-                useEffect(() => {
-                    if (spanRef.current && textContainerRef.current) {
-                        const element = spanRef.current;
-                        const container = textContainerRef.current;
-                        const containerStyles = window.getComputedStyle(container);
-                        const containerWidth = Math.floor(parseFloat(containerStyles.width));
-                        const wordWidth = Math.floor(element.scrollWidth);
-                        setIsTruncated(wordWidth > containerWidth);
-                    }
-                }, [spanRef, textContainerRef]);
+                    useEffect(() => {
+                        if (spanRef.current && textContainerRef.current) {
+                            const element = spanRef.current;
+                            const container = textContainerRef.current;
+                            const containerStyles = window.getComputedStyle(container);
+                            const containerWidth = Math.floor(parseFloat(containerStyles.width));
+                            const wordWidth = Math.floor(element.scrollWidth);
 
-                return (
-                    <React.Fragment key={ index }>
-                    {isTruncated ? (
-                        <Tooltip
-                            content={ titleWord }>
+                            setIsTruncated(wordWidth > containerWidth);
+                        }
+                    }, [ spanRef, textContainerRef ]);
+
+                    return (
+                        <React.Fragment key = { index }>
+                        {isTruncated ? (
+                            <Tooltip
+                                content = { titleWord }>
+                                <span
+                                    className = { classes.title }
+                                    ref = { spanRef }>
+                                        {t(titleWord)}
+                                </span>
+                            </Tooltip>
+                        ):(
                             <span
-                                ref={ spanRef }
-                                className={classes.title}>
-                                {t(titleWord)}
+                                ref = { spanRef }
+                                className = { classes.title }>
+                                    {t(titleWord)}
                             </span>
-                        </Tooltip>
-                    ):(
-                        <span
-                            ref={ spanRef }
-                            className={ classes.title }>
-                                {t(titleWord)}
-                        </span>
-                    )}
-                    {index < titleArray.length - 1 && ' '}
-                    </React.Fragment>
-                );
-            })}
+                        )}
+                        {index < titleArray.length - 1 && ' '}
+                        </React.Fragment>
+                    );
+                })}
                 </span>
         );
     }, [ title, titleKey, titleArguments ]);
@@ -381,7 +382,7 @@ const Notification = ({
                         size = { 20 }
                         src = { getIcon() } />
                 </div>
-                <div ref={textContainerRef} className = { classes.textContainer }>
+                <div ref = { textContainerRef } className = { classes.textContainer }>
                     {renderNotificationTitle()}
                     {renderDescription()}
                     <div className = { classes.actionsContainer }>
