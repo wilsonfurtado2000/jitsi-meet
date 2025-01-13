@@ -320,48 +320,45 @@ const Notification = ({
         return iconToDisplay;
     }, [ icon, appearance ]);
 
-    const NotificationTitleWord = ({ className, containerRef, word }) => {
-        const spanRef = React.useRef<HTMLSpanElement>(null);
-        const [ isTruncated, setIsTruncated ] = useState(false);
-    
-        useEffect(() => {
-            if (spanRef.current && containerRef.current) {
-                const element = spanRef.current;
-                const container = containerRef.current;
-                const containerStyles = window.getComputedStyle(container);
-                const containerWidth = Math.floor(parseFloat(containerStyles.width));
-                const wordWidth = Math.floor(element.scrollWidth);
-    
-                setIsTruncated(wordWidth > containerWidth);
-            }
-        }, [ spanRef, containerRef ]);
-    
-        return isTruncated ? (
-            <Tooltip content = { word }>
-                <span className = { className } ref = { spanRef }>
-                    {t(word)}
-                </span>
-            </Tooltip>
-        ) : (
-            <span className = { className } ref = { spanRef }>
-                {t(word)}
-            </span>
-        );
-    };
-
     const renderNotificationTitle = useCallback(() => {
         const notificationTitle = String(title || t(titleKey ?? '', titleArguments));
 
         return (
             <span>
                 {notificationTitle.split(' ').map((titleWord, index, titleArray) => {
+                    const spanRef = React.createRef<HTMLSpanElement>();
+                    const [ isTruncated, setIsTruncated ] = useState(false);
+
+                    useEffect(() => {
+                        if (spanRef.current && textContainerRef.current) {
+                            const element = spanRef.current;
+                            const container = textContainerRef.current;
+                            const containerStyles = window.getComputedStyle(container);
+                            const containerWidth = Math.floor(parseFloat(containerStyles.width));
+                            const wordWidth = Math.floor(element.scrollWidth);
+
+                            setIsTruncated(wordWidth > containerWidth);
+                        }
+                    }, [ spanRef, textContainerRef ]);
+
                     return (
                         <React.Fragment key = { index }>
-                            <NotificationTitleWord
-                                className = { classes.title }
-                                containerRef = { textContainerRef }
-                                word = { t(titleWord) }
-                            />
+                            {isTruncated ? (
+                                <Tooltip
+                                    content = { titleWord }>
+                                    <span
+                                        className = { classes.title }
+                                        ref = { spanRef }>
+                                        {t(titleWord)}
+                                    </span>
+                                </Tooltip>
+                            ) : (
+                                <span
+                                    className = { classes.title }
+                                    ref = { spanRef }>
+                                    {t(titleWord)}
+                                </span>
+                            )}
                             {index < titleArray.length - 1 && ' '}
                         </React.Fragment>
                     );
